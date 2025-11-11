@@ -42,8 +42,7 @@ torchrun \
     --master_port=$MASTER_PORT \
     -m examples.inference_zyc \
     -i "$INPUT_FILE" \
-    -o "$OUTPUT_DIR" \
-    --setup.model depth
+    -o "$OUTPUT_DIR"
 
 echo ""
 echo "✅ Inference completed! Check results in: $OUTPUT_DIR"
