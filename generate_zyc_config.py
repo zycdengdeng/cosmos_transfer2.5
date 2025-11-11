@@ -8,9 +8,12 @@ import json
 from pathlib import Path
 
 # 配置
-BASE_DIR = Path("/mnt/zihanw/cosmos-transfer2.5/data_002")  # 使用软链接避免中文路径
+BASE_DIR = Path("/mnt/zihanw/cosmos-transfer2.5/data_prepa")
 COLOR_DIR = BASE_DIR / "color"
 DEPTH_DIR = BASE_DIR / "depth"
+
+# 文件名模板
+FILE_SUFFIX = "_90frames_1280x720.mp4"
 
 # 视角映射（你的命名 → Cosmos 标准命名）
 VIEW_MAPPING = {
@@ -38,9 +41,9 @@ def generate_single_view_config(view_name: str, depth_weight: float = 1.0, vis_w
     config = {
         "name": f"zyc_{view_name}",
         **DEFAULT_CONFIG,
-        "video_path": str(COLOR_DIR / f"{view_name}_color.mp4"),
+        "video_path": str(COLOR_DIR / f"{view_name}_color{FILE_SUFFIX}"),
         "depth": {
-            "control_path": str(DEPTH_DIR / f"{view_name}_depth.mp4"),
+            "control_path": str(DEPTH_DIR / f"{view_name}_depth{FILE_SUFFIX}"),
             "control_weight": depth_weight,
         }
     }
@@ -48,7 +51,7 @@ def generate_single_view_config(view_name: str, depth_weight: float = 1.0, vis_w
     # 如果使用 vis control
     if vis_weight > 0:
         config["vis"] = {
-            "control_path": str(COLOR_DIR / f"{view_name}_color.mp4"),
+            "control_path": str(COLOR_DIR / f"{view_name}_color{FILE_SUFFIX}"),
             "control_weight": vis_weight,
         }
 
