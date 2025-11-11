@@ -8,7 +8,7 @@ import json
 from pathlib import Path
 
 # 配置
-BASE_DIR = Path("/mnt/zihanw/车路协同投影工作/mutiCPU加速乌鸡变投影/Transfer_mp4视频生成/002")
+BASE_DIR = Path("/mnt/zihanw/cosmos-transfer2.5/data_002")  # 使用软链接避免中文路径
 COLOR_DIR = BASE_DIR / "color"
 DEPTH_DIR = BASE_DIR / "depth"
 
