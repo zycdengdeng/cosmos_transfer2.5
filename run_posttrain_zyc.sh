@@ -35,7 +35,7 @@ torchrun \
     dataloader_train.dataset.dataset_dir=$DATASET_ROOT \
     trainer.max_iter=500 \
     trainer.validation_iter=100 \
-    trainer.snapshot_save_iter=100 \
+    checkpoint.save_iter=100 \
     trainer.logging_iter=10 \
     gen_opt.lr=1e-5
 
