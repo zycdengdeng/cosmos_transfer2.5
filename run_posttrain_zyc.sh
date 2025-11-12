@@ -33,6 +33,7 @@ torchrun \
     job.name=zyc_pointcloud2rgb \
     job.group=zyc_posttrain \
     dataloader_train.dataset.dataset_dir=$DATASET_ROOT \
+    model_parallel.context_parallel_size=1 \
     trainer.max_iter=500 \
     trainer.validation_iter=100 \
     checkpoint.save_iter=100 \
