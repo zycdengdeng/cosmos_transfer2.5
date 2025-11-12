@@ -32,20 +32,21 @@
 
 ## 完整流程
 
-### **Step 1: 生成所有视角的 captions**
+### **Step 1: 验证数据准备**
 
+确认所有 caption 文件已准备好：
 ```bash
-cd /mnt/zihanw/cosmos-transfer2.5
-
-# 生成所有视角的 caption 文件
-python scripts/generate_captions_zyc.py
+ls /mnt/zihanw/cosmos-transfer2.5/datasets/RGBCloud/captions/ftheta_camera_front_wide_120fov/
+# 应该看到: 002.json, 004.json, 006.json, 008.json, 009.json
 ```
 
-**输出**：
-```
-✅ Created: captions/ftheta_camera_front_wide_120fov/002.json
-✅ Created: captions/ftheta_camera_cross_left_120fov/002.json
-...
+**Caption 格式示例**（已准备好 ✅）：
+```json
+{
+    "caption": "A driving scene captured from a vehicle's front wide camera, The car is driving through the intersection.",
+    "sequence_id": "004",
+    "camera": "ftheta_camera_front_wide_120fov"
+}
 ```
 
 ---
@@ -261,16 +262,13 @@ gen_opt.lr=2e-5  # 从 1e-5 提高到 2e-5
 ## 快速命令总结
 
 ```bash
-# 1. 生成 captions
-python scripts/generate_captions_zyc.py
-
-# 2. 训练
+# 1. 训练（captions 已准备好 ✅）
 bash run_posttrain_zyc.sh
 
-# 3. 推理（微调模型）
+# 2. 推理（微调模型）
 bash run_inference_posttrained_zyc.sh
 
-# 4. 对比（预训练模型）
+# 3. 对比（预训练模型）
 torchrun --nproc_per_node=2 -m examples.inference_zyc \
     -i assets/zyc_009_pretrained.json \
     -o outputs/pretrained_zyc_009
