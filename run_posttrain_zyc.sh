@@ -29,6 +29,7 @@ torchrun \
     -m scripts.train \
     --config=cosmos_transfer2/_src/transfer2_multiview/configs/vid2vid_transfer/config.py \
     -- experiment=transfer2_auto_multiview_post_train_example \
+    data_train=example_singleview_train_data_control_input_hdmap \
     job.wandb_mode=disabled \
     job.name=zyc_pointcloud2rgb \
     job.group=zyc_posttrain \
