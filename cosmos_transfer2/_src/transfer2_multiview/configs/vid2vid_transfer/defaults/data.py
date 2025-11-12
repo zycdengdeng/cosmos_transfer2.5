@@ -66,8 +66,8 @@ def get_hdmap_multiview_dataset(is_train=True):
     )
 
 
-def get_hdmap_singleview_dataset(is_train=True):
-    """Single view training for limited GPU setups (e.g., 2 GPUs)"""
+def get_hdmap_singleview_dataset_single_zyc(is_train=True):
+    """ZYC's single view training for 2 GPU setup - front camera only"""
     camera_keys = [
         "ftheta_camera_front_wide_120fov",
     ]
@@ -112,6 +112,6 @@ def register_data_ctrlnet():
     cs.store(
         group="data_train",
         package="dataloader_train",
-        name=f"example_singleview_train_data_control_input_hdmap",
-        node=get_hdmap_singleview_dataset(is_train=True),
+        name=f"example_singleview_train_data_control_input_hdmap_single_zyc",
+        node=get_hdmap_singleview_dataset_single_zyc(is_train=True),
     )

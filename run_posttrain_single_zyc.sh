@@ -1,6 +1,6 @@
 #!/bin/bash
-# ZYC Post-Training Script
-# 用彩色点云投影训练 multiview 模型
+# ZYC Single-View Post-Training Script (2 GPU Setup)
+# 仅训练前置摄像头视角
 
 set -e
 
@@ -14,11 +14,12 @@ MASTER_PORT=12341
 export IMAGINAIRE_OUTPUT_ROOT=$OUTPUT_ROOT
 
 echo "======================================"
-echo "ZYC Post-Training"
+echo "ZYC Single-View Post-Training (2 GPUs)"
 echo "======================================"
 echo "Dataset: $DATASET_ROOT"
 echo "Output: $OUTPUT_ROOT"
 echo "Num GPUs: $NUM_GPUS"
+echo "Camera: Front Wide (120 FOV) only"
 echo "======================================"
 echo ""
 
@@ -29,10 +30,12 @@ torchrun \
     -m scripts.train \
     --config=cosmos_transfer2/_src/transfer2_multiview/configs/vid2vid_transfer/config.py \
     -- experiment=transfer2_auto_multiview_post_train_example \
+    data_train=example_singleview_train_data_control_input_hdmap_single_zyc \
     job.wandb_mode=disabled \
-    job.name=zyc_pointcloud2rgb \
-    job.group=zyc_posttrain \
+    job.name=zyc_pointcloud2rgb_single \
+    job.group=zyc_posttrain_single \
     dataloader_train.dataset.dataset_dir=$DATASET_ROOT \
+    model_parallel.context_parallel_size=1 \
     trainer.max_iter=500 \
     trainer.validation_iter=100 \
     checkpoint.save_iter=100 \
@@ -43,5 +46,5 @@ echo ""
 echo "======================================"
 echo "✅ Training completed!"
 echo "Checkpoints saved to:"
-echo "$OUTPUT_ROOT/cosmos_transfer_v2p5/zyc_posttrain/zyc_pointcloud2rgb/checkpoints"
+echo "$OUTPUT_ROOT/cosmos_transfer_v2p5/zyc_posttrain_single/zyc_pointcloud2rgb_single/checkpoints"
 echo "======================================"
