@@ -32,7 +32,7 @@ torchrun \
     job.wandb_mode=disabled \
     job.name=zyc_pointcloud2rgb \
     job.group=zyc_posttrain \
-    +dataloader_train.dataset.dataset_dir=$DATASET_ROOT \
+    dataloader_train.dataset.dataset_dir=$DATASET_ROOT \
     trainer.max_iter=500 \
     trainer.validation_iter=100 \
     trainer.snapshot_save_iter=100 \
