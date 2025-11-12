@@ -37,7 +37,7 @@ torchrun \
     trainer.validation_iter=100 \
     checkpoint.save_iter=100 \
     trainer.logging_iter=10 \
-    gen_opt.lr=1e-5
+    optimizer.lr=1e-5
 
 echo ""
 echo "======================================"
