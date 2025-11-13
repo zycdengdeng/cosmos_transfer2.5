@@ -67,16 +67,17 @@ echo ""
 
 # Step 4: 运行推理
 echo "Running inference with post-trained model on sample 009..."
+echo "Checkpoint: $CHECKPOINT_PATH/model_ema_bf16.pt"
 echo "Output directory: /mnt/zihanw/cosmos-transfer2.5/outputs/posttrained_single_zyc_009"
 echo ""
 
 torchrun \
     --nproc_per_node=$NUM_GPUS \
     --master_port=$MASTER_PORT \
-    -m cosmos_transfer2.inference \
-    --inference_config $INFERENCE_CONFIG \
-    --checkpoint_path $CHECKPOINT_PATH/model_ema_bf16.pt \
-    --output_dir /mnt/zihanw/cosmos-transfer2.5/outputs/posttrained_single_zyc_009
+    -m examples.inference_zyc \
+    -i $INFERENCE_CONFIG \
+    --setup.output_dir /mnt/zihanw/cosmos-transfer2.5/outputs/posttrained_single_zyc_009 \
+    --setup.checkpoint_path $CHECKPOINT_PATH/model_ema_bf16.pt
 
 echo ""
 echo "======================================"
