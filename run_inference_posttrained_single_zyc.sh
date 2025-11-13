@@ -76,8 +76,8 @@ torchrun \
     --master_port=$MASTER_PORT \
     -m examples.inference_zyc \
     -i $INFERENCE_CONFIG \
-    --setup.output_dir /mnt/zihanw/cosmos-transfer2.5/outputs/posttrained_single_zyc_009 \
-    --setup.checkpoint_path $CHECKPOINT_PATH/model_ema_bf16.pt
+    -o /mnt/zihanw/cosmos-transfer2.5/outputs/posttrained_single_zyc_009 \
+    --checkpoint-path $CHECKPOINT_PATH/model_ema_bf16.pt
 
 echo ""
 echo "======================================"
