@@ -39,25 +39,19 @@ if [ ! -f "$CHECKPOINT_PATH/model_ema_bf16.pt" ]; then
     echo ""
 fi
 
-# Step 3: 生成推理配置（sample 009 - 使用原始分离的 color 和 depth 视频）
+# Step 3: 生成推理配置（sample 009 - 使用训练数据集中的点云投影控制输入）
 INFERENCE_CONFIG="/tmp/zyc_posttrain_single_inference_009.jsonl"
-DATA_PREP_ROOT="/mnt/zihanw/cosmos-transfer2.5/data_prepa/ftheta_camera_front_wide_120fov"
-COLOR_VIDEO="$DATA_PREP_ROOT/color/009_90frames_1280x720.mp4"
-DEPTH_VIDEO="$DATA_PREP_ROOT/depth/009_90frames_1280x720.mp4"
+CONTROL_INPUT="$DATASET_ROOT/control_input_hdmap_bbox/ftheta_camera_front_wide_120fov/009.mp4"
 
-# 检查输入文件是否存在
-if [ ! -f "$COLOR_VIDEO" ]; then
-    echo "❌ Error: Color video not found: $COLOR_VIDEO"
-    exit 1
-fi
-if [ ! -f "$DEPTH_VIDEO" ]; then
-    echo "❌ Error: Depth video not found: $DEPTH_VIDEO"
+# 检查控制输入文件是否存在
+if [ ! -f "$CONTROL_INPUT" ]; then
+    echo "❌ Error: Control input not found: $CONTROL_INPUT"
     exit 1
 fi
 
-# JSONL 格式：每行一个紧凑的 JSON 对象
+# JSONL 格式：点云投影既作为video_path（提供元信息）又作为控制信号
 cat > $INFERENCE_CONFIG <<EOFCONFIG
-{"name": "009", "prompt": "A realistic driving scene at an urban intersection with multiple lanes, traffic lights, road markings, and surrounding buildings. The scene captures a typical city road environment with clear visibility and detailed urban infrastructure.", "video_path": "$COLOR_VIDEO", "guidance": 3, "num_conditional_frames": 0, "num_steps": 35, "resolution": "720", "seed": 2025, "depth": {"control_path": "$DEPTH_VIDEO", "control_weight": 1.0}}
+{"name": "009", "prompt": "A realistic driving scene at an urban intersection with multiple lanes, traffic lights, road markings, and surrounding buildings. The scene captures a typical city road environment with clear visibility and detailed urban infrastructure.", "video_path": "$CONTROL_INPUT", "guidance": 3, "num_conditional_frames": 0, "num_steps": 35, "resolution": "720", "seed": 2025, "depth": {"control_path": "$CONTROL_INPUT", "control_weight": 1.0}}
 EOFCONFIG
 
 echo "Generated inference config: $INFERENCE_CONFIG"
