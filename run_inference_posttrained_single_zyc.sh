@@ -39,12 +39,19 @@ if [ ! -f "$CHECKPOINT_PATH/model_ema_bf16.pt" ]; then
     echo ""
 fi
 
-# Step 3: 生成推理配置（sample 009 - 只有前置摄像头）
+# Step 3: 生成推理配置（sample 009 - 使用训练数据集中的控制输入）
 INFERENCE_CONFIG="/tmp/zyc_posttrain_single_inference_009.jsonl"
+CONTROL_INPUT="$DATASET_ROOT/control_input_hdmap_bbox/ftheta_camera_front_wide_120fov/009.mp4"
+
+# 检查控制输入文件是否存在
+if [ ! -f "$CONTROL_INPUT" ]; then
+    echo "❌ Error: Control input not found: $CONTROL_INPUT"
+    exit 1
+fi
 
 # JSONL 格式：每行一个紧凑的 JSON 对象
-cat > $INFERENCE_CONFIG <<'EOFCONFIG'
-{"name": "009", "prompt": "A realistic driving scene at an urban intersection with multiple lanes, traffic lights, road markings, and surrounding buildings. The scene captures a typical city road environment with clear visibility and detailed urban infrastructure.", "guidance": 3, "num_conditional_frames": 0, "num_steps": 35, "resolution": "720", "seed": 2025, "depth": {"control_path": "/mnt/zihanw/cosmos-transfer2.5/data_prepa/ftheta_camera_front_wide_120fov/depth/009_90frames_1280x720.mp4", "control_weight": 0.8}, "vis": {"control_path": "/mnt/zihanw/cosmos-transfer2.5/data_prepa/ftheta_camera_front_wide_120fov/color/009_90frames_1280x720.mp4", "control_weight": 0.2}}
+cat > $INFERENCE_CONFIG <<EOFCONFIG
+{"name": "009", "prompt": "A realistic driving scene at an urban intersection with multiple lanes, traffic lights, road markings, and surrounding buildings. The scene captures a typical city road environment with clear visibility and detailed urban infrastructure.", "guidance": 3, "num_conditional_frames": 0, "num_steps": 35, "resolution": "720", "seed": 2025, "depth": {"control_path": "$CONTROL_INPUT", "control_weight": 1.0}}
 EOFCONFIG
 
 echo "Generated inference config: $INFERENCE_CONFIG"
